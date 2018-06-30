@@ -1,0 +1,8 @@
+prices<-Quandl("BSE/BSEMID", start_date=Sys.Date()-2800, end_date=Sys.Date(), type="xts")
+prices$ret<-log(prices$Close/lag(prices$Close, k=20))
+hist(prices$ret[!is.na(prices$ret)], breaks=20, plot=FALSE)
+hist(prices$ret[!is.na(prices$ret)], breaks=20)
+length(prices$ret[!is.na(prices$ret)])
+length(prices$ret[!is.na(prices$ret) & prices$ret<0])
+mean(prices$ret, na.rm=TRUE)
+sd(prices$ret, na.rm=TRUE)
