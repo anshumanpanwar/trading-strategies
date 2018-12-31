@@ -97,10 +97,10 @@ prices2 <- clean.data(getYahooData("^NSEI", start = as.numeric(format(Sys.Date()
 eg<-egcm(prices1$Close, prices2$Close, include.const=FALSE)
 plot(eg)
 
-all.data<-read.csv("D:/Work/Stocks/all-data-20180625.csv", row.names=1)
-lookback<-240
-prices1<-as.data.frame(all.data$TATAELXSI.NS)[(nrow(all.data)-lookback+1):nrow(all.data),1]
-prices2<-as.data.frame(all.data$TCS.NS)[(nrow(all.data)-lookback+1):nrow(all.data),1]
+all.data<-read.csv("C:/Work/trading-strategies/Pair/all-data-20180814.csv", row.names=1)
+lookback<-60
+prices1<-as.data.frame(all.data$ASIANPAINT.NS)[(nrow(all.data)-lookback+1):nrow(all.data),1]
+prices2<-as.data.frame(all.data$BERGEPAINT.NS)[(nrow(all.data)-lookback+1):nrow(all.data),1]
 eg<-egcm(prices1, prices2, include.const=FALSE)
 plot(eg)
 summary(eg)

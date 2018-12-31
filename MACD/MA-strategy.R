@@ -275,10 +275,10 @@ addMACD(fast = 20, slow = 40, signal = 9)
 addBBands() 
 # addTA(log(prices$Total.Trade.Quantity)*mean(prices$adj.close)/log(mean(prices$Total.Trade.Quantity)), on = 1, col = "blue")
 
-  lookback<-200
-  prices <- adjust.prices("NIFTY_SMALL_100", Sys.Date() - lookback, Sys.Date(),corp.actions )
+  lookback<-400
+  prices <- adjust.prices("CNX_NIFTY", Sys.Date() - lookback, Sys.Date(),corp.actions )
   prices.normalized<-data.frame(normalize.prices(prices))[,c("Close", "Open","High", "Low")]
-  prices.normalized<-Quandl("NSE/NIFTY_SMALL_100", start_date=Sys.Date() - lookback, end_date=Sys.Date(), type="xts")
+  # prices.normalized<-Quandl("BSE/BSEMID", start_date=Sys.Date() - lookback, end_date=Sys.Date(), type="xts")
   chartSeries(prices.normalized, theme=chartTheme('white'))
   addMACD(fast = 12, slow = 26, signal = 9) 
   # addMACD(fast = 5, slow = 15, signal = 7) 

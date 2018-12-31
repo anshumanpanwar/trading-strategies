@@ -11,9 +11,9 @@ library(xgboost)
 Quandl.api_key("rAHKcgv_ymH7_o9s5nWN")
 # data <- Quandl("TC1/HDFC")
 # data <- Quandl("NSE/ITC")
-work.dir<-"D:/Work/Stocks/pair/"
-corp.action.file<-"D:/Work/Stocks/Corporate_Actions.csv"
-data.dir<-"D:/Work/Stocks/data/"
+work.dir<-"C:/Work/trading-strategies/Pair/"
+corp.action.file<-paste(work.dir,"Corporate_Actions.csv" , sep="")
+data.dir<-paste(work.dir,"data/" , sep="")
 sectors.file<-paste(work.dir, "customized-sectors.csv" , sep="")
 pair.stats.file<-paste(work.dir, "pair-stats.csv" , sep="")
 start.time<-Sys.time()
@@ -285,7 +285,7 @@ getMLModelScore<-function(stock1, stock2, end_date, model.list){
 
 printf <- function(...)print(sprintf(...))
 
-corp.actions <- read.csv(corp.action.file, header=TRUE)
+corp.actions <- read.csv(corp.action.file, header=TRUE,stringsAsFactors = FALSE)
 corp.actions <-set.corp.action.data(corp.actions)
 # data<-adjust.prices("GODREJCP",'2016-01-01', '2017-05-23', corp.actions)
 
@@ -340,9 +340,9 @@ for(j in 1: ncol(all.data)){
   }
 }
 
-write.zoo(all.data, file = paste("D://Work/Stocks/all-data-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
-# write.zoo(all.data180, file = paste("D://Work/Stocks/all-data-180", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
-# all.data<-read.csv(paste("D://Work/Stocks/all-data-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), header = TRUE, check.names=FALSE)
+write.zoo(all.data, file = paste(work.dir, "all-data-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
+# write.zoo(all.data180, file = paste(work.dir,"all-data-180", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
+# all.data<-read.csv(paste(work.dir,"all-data-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), header = TRUE, check.names=FALSE)
 
 
 #Calculating RSI for all stocks
@@ -413,7 +413,7 @@ output<-allpairs.egcm(all.data,
                       startdate = as.numeric(format(Sys.Date() - 365, "%Y%m%d")),
                       enddate = as.numeric(format(Sys.Date(), "%Y%m%d")), p.value=0.10, i1test="adf", urtest = "adf", include.const=FALSE, na.action=na.omit
 )
-write.table(output, file = paste("D://Work/Stocks/summary-", format(Sys.Date(), "%Y%m%d"),"-adf.csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
+write.table(output, file = paste(work.dir,"summary-", format(Sys.Date(), "%Y%m%d"),"-adf.csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
 main.output$r.p.adf.365<-output$r.p
 main.output$is.cointegrated.adf.365<-output$is.cointegrated
 
@@ -426,7 +426,7 @@ output<-allpairs.egcm(all.data180,
                       enddate = as.numeric(format(Sys.Date(), "%Y%m%d")), p.value=0.10, include.const=FALSE, na.action=na.omit
 )
 
-write.table(output, file = paste("D://Work/Stocks/summary-180-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
+write.table(output, file = paste(work.dir,"summary-180-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
 main.output$r.p.pp.180<-output$r.p
 main.output$is.cointegrated.pp.180<-output$is.cointegrated
 main.output$beta180<-output$beta
@@ -444,14 +444,14 @@ output<-allpairs.egcm(all.data180,
                       startdate = as.numeric(format(Sys.Date() - 180, "%Y%m%d")),
                       enddate = as.numeric(format(Sys.Date(), "%Y%m%d")), p.value=0.10, i1test="adf", urtest = "adf", include.const=FALSE, na.action=na.omit
 )
-write.table(output, file = paste("D://Work/Stocks/summary-180-", format(Sys.Date(), "%Y%m%d"),"-adf.csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
+write.table(output, file = paste(work.dir,"summary-180-", format(Sys.Date(), "%Y%m%d"),"-adf.csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
 main.output$r.p.adf.180<-output$r.p
 main.output$is.cointegrated.adf.180<-output$is.cointegrated
 
 printf("CONSISTENCY CHECK 4")
 output[indices, c(1,2)]
 
-# write.table(main.output, file = paste("D://Work/Stocks/summary-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
+# write.table(main.output, file = paste(work.dir,"summary-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
 time.keeper("All pair EGCM Half year ADF ")
 
 sectors<-read.csv(sectors.file, header  = TRUE)
@@ -514,12 +514,12 @@ time.keeper("Applying additional statistics and ML models ")
 
 tryCatch(
   {
-    write.table(main.output, file = paste("D://Work/Stocks/summary-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
+    write.table(main.output, file = paste(work.dir,"summary-", format(Sys.Date(), "%Y%m%d"),".csv", sep=""), append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
   },error=function(cond) {
     #message(paste("File not found ", stock.ticker,"\n"))
     message("Here's the original error message:")
     message(cond)
-    file.name<-paste("D://Work/Stocks/summary-", format(Sys.Date(), "%Y%m%d"),as.integer(runif(1, 1, 100)),".csv", sep="")
+    file.name<-paste(work.dir,"summary-", format(Sys.Date(), "%Y%m%d"),as.integer(runif(1, 1, 100)),".csv", sep="")
     write.table(main.output, file = file.name, append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
     message("summary written to following file...")
     file.name
@@ -527,7 +527,7 @@ tryCatch(
     #message(paste("File not found ", stock.ticker,"\n"))
     message("Warning: Here's the original error message:")
     message(cond)
-    file.name<-paste("D://Work/Stocks/summary-", format(Sys.Date(), "%Y%m%d"),as.integer(runif(1, 1, 100)),".csv", sep="")
+    file.name<-paste(work.dir,"summary-", format(Sys.Date(), "%Y%m%d"),as.integer(runif(1, 1, 100)),".csv", sep="")
     write.table(main.output, file = file.name, append = FALSE, col.names = TRUE, sep = ",", row.names=FALSE)
     message("summary written to following file...")
     file.name
